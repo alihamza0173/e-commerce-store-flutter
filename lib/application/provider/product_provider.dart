@@ -9,14 +9,29 @@ class ProductProvider extends ChangeNotifier {
 
   ProductProvider(this._productRepositry);
   final List<Product> _products = [];
+  int _skipProducts = 0;
+  bool _isLoading = false;
 
   List<Product> get products => _products;
 
-  void getProducts() {
-    _productRepositry.getProducts().then((value) {
+  Future<void> getProducts() async {
+    _productRepositry.getProducts(_skipProducts).then((value) {
       _products.addAll(value);
+      _skipProducts < 90 ? _skipProducts += 10 : _skipProducts = 0;
       notifyListeners();
     });
+  }
+
+  Future<void> loagMoreProducts() async {
+    if (!_isLoading) {
+      _isLoading = true;
+      getProducts().then((value) => _isLoading = false);
+    }
+  }
+
+  Future<void> refreshProducts() async {
+    _products.clear();
+    getProducts();
   }
 }
 

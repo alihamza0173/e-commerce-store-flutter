@@ -6,9 +6,9 @@ final dio = Dio();
 
 class ProductService extends ProductRepositry {
   @override
-  Future<List<Product>> getProducts() async {
-    final response =
-        await dio.get('https://dummyjson.com/products?skip=0&limit=10');
+  Future<List<Product>> getProducts(int skipProducts) async {
+    final response = await dio
+        .get('https://dummyjson.com/products?skip=$skipProducts&limit=10');
     final products = response.data as Map<String, dynamic>;
     final listOfProducts = products['products'] as List<dynamic>;
     return listOfProducts
