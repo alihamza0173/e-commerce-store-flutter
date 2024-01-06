@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:e_commerce_store/application/provider/internet_connectivity_provider.dart';
 import 'package:e_commerce_store/application/provider/product_provider.dart';
 import 'package:e_commerce_store/application/provider/settings_provider.dart';
 import 'package:e_commerce_store/presentation/screens/product_screen/ui/delete_product_widget.dart';
@@ -15,16 +19,26 @@ class ProductScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<ProductScreen> {
+  late final StreamSubscription<ConnectivityResult> subscription;
   @override
   void initState() {
     ref.read(productProvider).getProducts();
+    ref.read(internetConnectivityProvider).init(context);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(productProvider).products;
     final screenWidth = MediaQuery.of(context).size.width;
+    final isInterntConnected =
+        ref.watch(internetConnectivityProvider).isConnected;
 
     return Scaffold(
       appBar: AppBar(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-bool isOpen = false;
-
 class DeleteProductWidget extends StatelessWidget {
   const DeleteProductWidget(
       {super.key, required this.delkey, required this.child});
@@ -12,13 +10,6 @@ class DeleteProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
         key: delkey,
-        onUpdate: (details) {
-          if (details.progress > 0.2 &&
-              !isOpen &&
-              details.direction == DismissDirection.endToStart) {
-            confirmDelMessage(context);
-          }
-        },
         background: Container(
           color: Colors.red, // Swipe background color
           alignment: Alignment.centerRight,
@@ -30,14 +21,20 @@ class DeleteProductWidget extends StatelessWidget {
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          // Handle deletion here
-          // ref.read(productProvider).deleteProduct(product.id);
+          confirmDelMessage(context).then((value) {
+            if (value!) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Item removed'),
+                ),
+              );
+            }
+          });
         },
         child: child);
   }
 
   Future<bool?> confirmDelMessage(BuildContext context) {
-    isOpen = true;
     return showDialog(
       context: context,
       builder: (context) {
@@ -50,14 +47,12 @@ class DeleteProductWidget extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
-                isOpen = false;
               },
               child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
-                isOpen = false;
               },
               child: const Text('Yes'),
             ),
