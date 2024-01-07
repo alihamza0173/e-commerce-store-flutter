@@ -15,11 +15,14 @@ class ProductProvider extends ChangeNotifier {
   List<Product> get products => _products;
 
   Future<void> getProducts() async {
-    _productRepositry.getProducts(_skipProducts).then((value) {
+    try {
+      final value = await _productRepositry.getProducts(_skipProducts);
       _products.addAll(value);
       _skipProducts < 90 ? _skipProducts += 10 : _skipProducts = 0;
       notifyListeners();
-    });
+    } catch (e) {
+      debugPrint('Error getting products: $e');
+    }
   }
 
   Future<void> loagMoreProducts() async {
