@@ -2,9 +2,9 @@ class Product {
   final int id;
   final String title;
   final String description;
-  final double price;
-  final double discountPercentage;
-  final double rating;
+  final dynamic price;
+  final dynamic discountPercentage;
+  final dynamic rating;
   final int stock;
   final String brand;
   final String category;
@@ -33,7 +33,7 @@ class Product {
       price: json['price'] ?? 0,
       discountPercentage: json['discount_percentage'] ?? 0,
       rating: json['rating'] ?? 0,
-      stock: json['stock'] as int,
+      stock: json['stock'] ?? 0,
       brand: json['brand'] as String,
       category: json['category'] as String,
       thumbnail: json['thumbnail'] as String,
