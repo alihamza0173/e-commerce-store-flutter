@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DeleteProductWidget extends StatelessWidget {
@@ -20,25 +21,24 @@ class DeleteProductWidget extends StatelessWidget {
           ),
         ),
         direction: DismissDirection.endToStart,
+        confirmDismiss: (direction) async {
+          return await confirmDelMessage(context);
+        },
         onDismissed: (direction) {
-          confirmDelMessage(context).then((value) {
-            if (value!) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Item removed'),
-                ),
-              );
-            }
-          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Item removed'),
+            ),
+          );
         },
         child: child);
   }
 
   Future<bool?> confirmDelMessage(BuildContext context) {
-    return showDialog(
+    return showCupertinoDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return CupertinoAlertDialog(
           title: const Text('Are you sure?'),
           content: const Text(
             'Do you want to remove this item?',

@@ -20,7 +20,8 @@ class InternetConnectivityProvider extends ChangeNotifier {
         _isConnected = false;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('No internet connection'),
+            duration: Duration(days: 1),
+            content: Text('No Internet connection'),
           ),
         );
       } else if (result == ConnectivityResult.vpn) {
@@ -28,6 +29,13 @@ class InternetConnectivityProvider extends ChangeNotifier {
         context.push(AppRoutes.vpnNotAllowed);
       } else {
         _isConnected = true;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('Internet connection restored'),
+          ),
+        );
       }
     });
   }

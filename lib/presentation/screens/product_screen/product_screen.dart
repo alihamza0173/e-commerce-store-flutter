@@ -37,8 +37,6 @@ class _HomeScreenState extends ConsumerState<ProductScreen> {
   Widget build(BuildContext context) {
     final products = ref.watch(productProvider).products;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isInterntConnected =
-        ref.watch(internetConnectivityProvider).isConnected;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +60,6 @@ class _HomeScreenState extends ConsumerState<ProductScreen> {
               child: CircularProgressIndicator.adaptive(),
             )
           : LoadMoreDataWidget(
-              ref: ref,
               child: ListView.builder(
                 itemCount: products.length + 1,
                 itemBuilder: (context, index) {
@@ -84,6 +81,8 @@ class _HomeScreenState extends ConsumerState<ProductScreen> {
                                   placeholder: (context, url) => const Center(
                                     child: CircularProgressIndicator.adaptive(),
                                   ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                   width: screenWidth *
                                       0.9, // Responsive image width
                                   height: screenWidth *

@@ -5,9 +5,14 @@ class VpnNotAllowed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('VPN not allowed'),
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('VPN not allowed'),
+          const Text('Please turn off your VPN and try again'),
+          FilledButton.tonal(onPressed: () {}, child: const Text('Retry')),
+        ],
       ),
     );
   }
