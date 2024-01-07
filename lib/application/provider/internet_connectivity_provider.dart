@@ -8,16 +8,12 @@ import 'package:go_router/go_router.dart';
 
 class InternetConnectivityProvider extends ChangeNotifier {
   StreamSubscription<ConnectivityResult>? subscription;
-  bool _isConnected = true;
-
-  bool get isConnected => _isConnected;
 
   void init(BuildContext context) {
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
-        _isConnected = false;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             duration: Duration(days: 1),
@@ -25,10 +21,8 @@ class InternetConnectivityProvider extends ChangeNotifier {
           ),
         );
       } else if (result == ConnectivityResult.vpn) {
-        _isConnected = false;
         context.push(AppRoutes.vpnNotAllowed);
       } else {
-        _isConnected = true;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

@@ -16,6 +16,7 @@ class ProductProvider extends ChangeNotifier {
   int _skipProducts = 0;
   bool _isLoading = false;
   final String _key = 'products';
+  bool _isCachedDataRetreived = false;
 
   List<Product> get products => _products;
 
@@ -35,7 +36,7 @@ class ProductProvider extends ChangeNotifier {
       } catch (e) {
         debugPrint('Error getting products: $e');
       }
-    } else {
+    } else if (!_isCachedDataRetreived) {
       _products.addAll(await getCachedProducts());
       notifyListeners();
     }
@@ -53,6 +54,7 @@ class ProductProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_key);
     if (jsonString != null) {
+      _isCachedDataRetreived = true;
       final decoded = jsonDecode(jsonString) as List<dynamic>;
       return decoded.map((e) => Product.fromJson(e)).toList();
     }
@@ -68,6 +70,7 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> refreshProducts() async {
     _products.clear();
+    _isCachedDataRetreived = false;
     getProducts();
   }
 }
