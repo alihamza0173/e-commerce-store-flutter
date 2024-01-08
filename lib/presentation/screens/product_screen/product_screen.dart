@@ -66,7 +66,7 @@ class _HomeScreenState extends ConsumerState<ProductScreen> {
                   if (index < products.length) {
                     final product = products[index];
                     return DeleteProductWidget(
-                      delkey: Key(product.id.toString()),
+                      id: product.id,
                       child: Card(
                         clipBehavior: Clip.antiAlias,
                         child: Padding(

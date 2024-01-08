@@ -42,6 +42,11 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
+  void deleteProduct(int id) {
+    _products.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
   Future<void> cacheProducts(List<Product> products) async {
     final prefs = await SharedPreferences.getInstance();
     final encodedProducts =

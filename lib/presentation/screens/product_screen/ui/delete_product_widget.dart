@@ -1,16 +1,17 @@
+import 'package:e_commerce_store/application/provider/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DeleteProductWidget extends StatelessWidget {
-  const DeleteProductWidget(
-      {super.key, required this.delkey, required this.child});
-  final Key delkey;
+class DeleteProductWidget extends ConsumerWidget {
+  const DeleteProductWidget({super.key, required this.id, required this.child});
+  final int id;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Dismissible(
-        key: delkey,
+        key: Key(id.toString()),
         background: Container(
           color: Colors.red, // Swipe background color
           alignment: Alignment.centerRight,
@@ -25,6 +26,7 @@ class DeleteProductWidget extends StatelessWidget {
           return await confirmDelMessage(context);
         },
         onDismissed: (direction) {
+          ref.read(productProvider).deleteProduct(id);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Item removed'),
