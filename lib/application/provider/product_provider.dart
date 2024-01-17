@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_commerce_store/application/services/product_service.dart';
+import 'package:e_commerce_store/core/enums/product_provider_status.dart';
 import 'package:e_commerce_store/core/models/product.dart';
 import 'package:e_commerce_store/core/repostries/product_repositry.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +19,12 @@ class ProductProvider extends ChangeNotifier {
   bool _isLoading = false;
   final String _key = 'products';
   bool _isCachedDataRetreived = false;
+  ProductProviderStatus _status = ProductProviderStatus.loading;
+  String _errorMessage = '';
 
   List<Product> get products => _products;
+  ProductProviderStatus get status => _status;
+  String get errorMessage => _errorMessage;
 
   Future<bool> checkInternetConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -32,14 +38,17 @@ class ProductProvider extends ChangeNotifier {
         _products.addAll(value);
         cacheProducts(_products);
         _skipProducts < 90 ? _skipProducts += 10 : _skipProducts = 0;
-        notifyListeners();
+        _status = ProductProviderStatus.loaded;
       } catch (e) {
-        debugPrint('Error getting products: $e');
+        log('Error getting products: $e');
+        _status = ProductProviderStatus.error;
+        _errorMessage = 'Error getting products';
       }
     } else if (!_isCachedDataRetreived) {
       _products.addAll(await getCachedProducts());
-      notifyListeners();
+      _status = ProductProviderStatus.loaded;
     }
+    notifyListeners();
   }
 
   void deleteProduct(int id) {
@@ -66,7 +75,7 @@ class ProductProvider extends ChangeNotifier {
     return [];
   }
 
-  Future<void> loagMoreProducts() async {
+  Future<void> loadMoreProducts() async {
     if (!_isLoading) {
       _isLoading = true;
       getProducts().then((value) => _isLoading = false);

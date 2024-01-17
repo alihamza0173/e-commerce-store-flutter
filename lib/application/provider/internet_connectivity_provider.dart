@@ -24,12 +24,6 @@ class InternetConnectivityProvider extends ChangeNotifier {
         context.push(AppRoutes.vpnNotAllowed);
       } else {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text('Internet connection restored'),
-          ),
-        );
       }
     });
   }

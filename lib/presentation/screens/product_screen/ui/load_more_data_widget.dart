@@ -18,7 +18,7 @@ class LoadMoreDataWidget extends ConsumerWidget {
             scrollNotification.metrics.maxScrollExtent) {
           ref
               .read(productProvider)
-              .loagMoreProducts(); // Fetch more data when reaching the end
+              .loadMoreProducts(); // Fetch more data when reaching the end
         }
         return true;
       },

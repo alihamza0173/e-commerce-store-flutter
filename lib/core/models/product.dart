@@ -2,9 +2,9 @@ class Product {
   final int id;
   final String title;
   final String description;
-  final dynamic price;
-  final dynamic discountPercentage;
-  final dynamic rating;
+  final num price;
+  final num discountPercentage;
+  final num rating;
   final int stock;
   final String brand;
   final String category;
